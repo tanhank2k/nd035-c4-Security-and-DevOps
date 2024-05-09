@@ -98,6 +98,10 @@
 			<plugin>
  		               	<groupId>org.apache.maven.plugins</groupId>
                 		<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version> <!-- This version or higher is suitable for Java 17 -->
+				<configuration>
+					<release>17</release> <!-- Ensures full compatibility with Java 17 -->
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
