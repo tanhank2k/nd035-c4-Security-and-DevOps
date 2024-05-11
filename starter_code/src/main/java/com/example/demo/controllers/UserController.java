@@ -52,18 +52,17 @@ public class UserController {
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
 		log.debug("UserController.createUser was called by user: {}", createUserRequest.getUsername());
-		User user = new User();
-		user.setUsername(createUserRequest.getUsername());
-		Cart cart = new Cart();
-		cartRepository.save(cart);
-		user.setCart(cart);
-
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
 			log.error("Error-User {} - Either length is less than 7 or pass and conf pass do not match. Unable to create .",
 					createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
+		User user = new User();
+		user.setUsername(createUserRequest.getUsername());
+		Cart cart = new Cart();
+		cartRepository.save(cart);
+		user.setCart(cart);
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		userRepository.save(user);
 		log.info("UserController.createUser was called by user: {} successfully. New user created", createUserRequest.getUsername());

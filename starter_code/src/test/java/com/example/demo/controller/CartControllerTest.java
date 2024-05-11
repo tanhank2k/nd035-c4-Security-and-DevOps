@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.TestUtils;
+import com.example.demo.utils.TestUtils;
 import com.example.demo.controllers.CartController;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.controller.helper.CartHelper.buildNewCart;
+import static com.example.demo.controller.helper.ItemHelper.buildNewItem;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -39,23 +41,15 @@ public class CartControllerTest {
     }
 
     @Test
-    public void addTocart() {
+    public void addToCart() {
         User user = new User();
         user.setUsername(USERNAME);
 
-        Item item = new Item();
-        item.setId(0L);
-        item.setName("Round Widget");
-        item.setPrice(new BigDecimal("2.99"));
-        item.setDescription("A widget that is round");
+        Item item = buildNewItem(0L, "Round Widget", new BigDecimal("2.99"), "A widget that is round");
 
-        Cart cart = new Cart();
-        cart.setId(0L);
         List<Item> itemList = new ArrayList<>();
         itemList.add(item);
-        cart.setItems(itemList);
-        cart.setTotal(new BigDecimal("2.99"));
-        cart.setUser(user);
+        Cart cart = buildNewCart(0L, itemList,user);
         user.setCart(cart);
 
         when(userRepo.findByUsername(USERNAME)).thenReturn(user);
@@ -70,9 +64,11 @@ public class CartControllerTest {
 
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
+
         Cart retrievedCart = response.getBody();
         assertNotNull(retrievedCart);
         assertEquals(Optional.of(0L).get(), retrievedCart.getId());
+
         List<Item> items = retrievedCart.getItems();
         assertNotNull(items);
         Item retrievedItem = items.get(0);
@@ -88,19 +84,11 @@ public class CartControllerTest {
         User user = new User();
         user.setUsername(USERNAME);
 
-        Item item = new Item();
-        item.setId(0L);
-        item.setName("Round Widget");
-        item.setPrice(new BigDecimal("2.99"));
-        item.setDescription("A widget that is round");
+        Item item = buildNewItem(0L, "Round Widget", new BigDecimal("2.99"), "A widget that is round");
 
-        Cart cart = new Cart();
-        cart.setId(0L);
         List<Item> itemList = new ArrayList<>();
         itemList.add(item);
-        cart.setItems(itemList);
-        cart.setTotal(new BigDecimal("2.99"));
-        cart.setUser(user);
+        Cart cart = buildNewCart(0L, itemList,user);
         user.setCart(cart);
 
         when(userRepo.findByUsername(USERNAME)).thenReturn(null);
@@ -118,23 +106,15 @@ public class CartControllerTest {
     }
 
     @Test
-    public void removeFromcart() {
+    public void removeFromCart() {
         User user = new User();
         user.setUsername(USERNAME);
 
-        Item item = new Item();
-        item.setId(0L);
-        item.setName("Round Widget");
-        item.setPrice(new BigDecimal("2.99"));
-        item.setDescription("A widget that is round");
+        Item item = buildNewItem(0L, "Round Widget", new BigDecimal("2.99"), "A widget that is round");
 
-        Cart cart = new Cart();
-        cart.setId(0L);
         List<Item> itemList = new ArrayList<>();
         itemList.add(item);
-        cart.setItems(itemList);
-        cart.setTotal(new BigDecimal("2.99"));
-        cart.setUser(user);
+        Cart cart = buildNewCart(0L, itemList,user);
         user.setCart(cart);
 
         when(userRepo.findByUsername(USERNAME)).thenReturn(user);
